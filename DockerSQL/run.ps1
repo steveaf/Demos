@@ -1,28 +1,12 @@
 ###############################################
-## wtf, how do I get this to my github? 
-## my AZ300 folder deployed fine.  I set my "Global" user id then. 
 
 ## git config --global user.name <github userID>
 ## git clone <URL from github link copied earlier>
 
-## so manually make a repo on github.
-## git config --global user.name steveaf
-## git clone https://github.com/steveaf/TSQL
-## That didnt work.  nothing new on github.
-
-
-## ctrl shift p, git clone for a wizard?
-## tried "Add to existing workspace"
-
-
-## why can't it make the github repo?
-## wtf is "Global" if one new directory doesn't know me?
 ###############################################
 
-## Use Linux containers
-## docker pull mcr.microsoft.com/mssql/server:2019-latest
-
-## docker pull mcr.microsoft.com/mssql/server:2019-latest
+#### Use Linux containers
+# docker pull mcr.microsoft.com/mssql/server:2019-latest
 
 ##  list images
 # docker image ls 
@@ -49,14 +33,17 @@ docker ps -a
 # Remove-Item C:\Users\folke\data\MSSQL\RPMBITEST\*.ldf -Recurse -Force  -ErrorAction Ignore
 # Remove-Item C:\Users\folke\data\MSSQL\RPMBITEST\*.ndf -Recurse -Force  -ErrorAction Ignore
 
-
-docker cp "C:\Users\folke\data\MSSQL\RPMBITEST\Staging_files_backup_2019_12_21_220002_4017201.bak" sql2019_Demo:\var\backups\
-
-docker cp "C:\Users\folke\data\MSSQL\RPMBITEST\Utility_backup_2019_12_21_220002_4954769.bak" sql2019_Demo:\var\backups\
+docker run -e "ACCEPT_EULA=Y" -e 'SA_PASSWORD=BilboB@ggins1' -p 1433:1433 --name sql2019_Demo  -v "C:\Users\folke\data\MSSQL\RPMBITEST\:/var/opt/mssql/data/" -d mcr.microsoft.com/mssql/server:2019-latest
 
 
+docker start sql2019_Demo
 
-docker run -e "ACCEPT_EULA=Y"  -e 'SA_PASSWORD=BilboB@ggins1' -p 1433:1433 --name sql2019_Demo  -v "C:\Users\folke\data\MSSQL\RPMBITEST\:/var/opt/mssql/data/" -d mcr.microsoft.com/mssql/server:2019-latest
+docker cp "C:\Users\folke\data\MSSQL\AdventureWorksDW2017\AdventureWorksDW2017.bak" sql2019_Demo:\var\backups\
+
+# docker cp "C:\Users\folke\data\MSSQL\RPMBITEST\Utility_backup_2019_12_21_220002_4954769.bak" sql2019_Demo:\var\backups\
+
+
+
 
 ### Where to put code?
 # -v "C:\Users\folke\source\repos\DockerSQL\RPMBITEST\TSQL\:/var/opt/mssql/" 
@@ -78,3 +65,20 @@ docker exec -it -u root sql2019_Demo bash
 ## enable-WindowsOptionalFeature -online -FeatureName Microsoft-Windows-subsystem-Linux
 
 
+##-----------------------------
+## Powershell?
+
+# Download the Microsoft repository GPG keys
+wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
+
+# Register the Microsoft repository GPG keys
+sudo dpkg -i packages-microsoft-prod.deb
+
+# Update the list of products
+sudo apt-get update
+
+# Install PowerShell
+sudo apt-get install -y powershell
+
+# Start PowerShell
+pwsh
